@@ -16,13 +16,13 @@ NailFlow keeps the human in charge. The quote is calculated deterministically fr
 
 ## Demo
 
-**Replace this section with a public demo URL or a genuine screen-recording link before publishing.** The current app runs locally at `http://127.0.0.1:4174` and has no hosted demo URL.
+**Live demo:** https://nail-flow-ai-lemon.vercel.app/\n\nThe deployed Vercel app demonstrates the current web experience. Local Gemma generation requires Ollama on the user’s machine; the hosted deployment should not be described as running local inference unless that behavior has been separately verified.
 
-Recommended short walkthrough: edit the starter service prices, enter a sample client request, generate a pack with the visible `LOCAL AI` badge, copy the draft without sending it, save it to the pipeline, and create a social content pack. Use sample details in the recording.
+Recommended short walkthrough: edit the starter service prices, enter a sample client request, generate a pack, edit the draft before copying, save it to the pipeline, and create a social content pack. Use sample details in the recording. Clearly distinguish the deployed experience from local Ollama/Gemma inference.
 
 ## Code
 
-Repository: **Add the real public GitHub repository URL after the new repository is created and pushed.**
+Repository: https://github.com/yagnik-satani-otelier/NailFlow-AI
 
 ## How I Built It
 
@@ -52,9 +52,9 @@ Potential category: **Best Use of Gemma**, if the finished, demonstrated project
 
 - Automated tests: `npm test` (20 passing unit and HTTP integration tests; the Ollama integration uses a mock server, not actual Gemma weights).
 - A browser UI smoke test with a mocked generation response covered in-place quote/content edits, saving to the client pipeline, service-duration editing, and 390px mobile layout without horizontal overflow.
-- Before publishing, still verify actual Ollama/Gemma inference on the target machine, the `LOCAL AI` / `TEMPLATE MODE` labels, persistence across a real page refresh, export/clear, and the final recording.
+- Before publishing, still verify actual Ollama/Gemma inference locally, the `LOCAL AI` / `TEMPLATE MODE` labels, persistence across a real page refresh, export/clear, and capture a short video walkthrough of the deployed app.
 - I have not conducted a field or customer test yet. Replace this note with only what was actually tested.
 
 ---
 
-**Submission checklist:** add a verified public repo link; add a deployed project or genuine video demo; publish using the Week 2 template and the `#hf26challenge` tag; verify current contest rules; and submit only one entry during the entry period. Do not publish this draft until placeholders are resolved and the demo has been recorded.
+**Submission checklist:** repository and deployed demo links are now included; capture a genuine walkthrough, publish using the official Week 2 submission template and `#hf26challenge` tag, verify current contest rules, and submit only one entry during the entry period. Do not publish this draft until placeholders are resolved and the demo has been recorded.
