@@ -10,6 +10,34 @@ const ROOT = path.join(__dirname, 'public');
 const PORT = Number(process.env.PORT) || 4174;
 const OLLAMA_URL = (process.env.OLLAMA_URL || 'http://127.0.0.1:11434').replace(/\/$/, '');
 const MODEL = process.env.OLLAMA_MODEL || 'gemma3:1b';
+
+// Ollama's JSON mode alone can still be unreliable with small models. Give the
+// runtime an explicit schema so it can constrain decoding to the UI contract.
+const OUTPUT_SCHEMAS = {
+  quote: {
+    type: 'object',
+    properties: {
+      whatsapp: { type: 'string' },
+      caption: { type: 'string' },
+      aftercare: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4 },
+      followup: { type: 'string' },
+      reviewNotes: { type: 'string' }
+    },
+    required: ['whatsapp', 'caption', 'aftercare', 'followup', 'reviewNotes'],
+    additionalProperties: false
+  },
+  content: {
+    type: 'object',
+    properties: {
+      caption: { type: 'string' },
+      shortStory: { type: 'string' },
+      hashtags: { type: 'array', items: { type: 'string' }, maxItems: 12 },
+      callToAction: { type: 'string' }
+    },
+    required: ['caption', 'shortStory', 'hashtags', 'callToAction'],
+    additionalProperties: false
+  }
+};
 const MIME = { '.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.json':'application/json; charset=utf-8', '.webmanifest':'application/manifest+json; charset=utf-8', '.svg':'image/svg+xml', '.png':'image/png', '.ico':'image/x-icon' };
 
 function send(res, status, data, type = 'application/json; charset=utf-8') {
@@ -64,7 +92,13 @@ async function generate(body) {
   try {
     const response = await fetch(`${OLLAMA_URL}/api/generate`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: MODEL, prompt, stream: false, format: 'json', options: { temperature: 0.55, num_predict: 600 } }),
+      body: JSON.stringify({
+        model: MODEL,
+        prompt,
+        stream: false,
+        format: OUTPUT_SCHEMAS[mode],
+        options: { temperature: 0.2, num_predict: 900 }
+      }),
       signal: AbortSignal.timeout(75_000)
     });
     if (!response.ok) throw new Error(`Ollama returned HTTP ${response.status}.`);
