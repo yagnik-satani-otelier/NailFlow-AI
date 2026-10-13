@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2 - 2026-10-13
+
+- Fixed Ollama generation formatting by sending explicit response schemas for quote and social-content modes.
+- Reduced generation randomness and raised the output budget for the small local Gemma model.
+- Added HTTP integration assertions confirming the schemas are sent to Ollama.
+
 ## 1.0.1 - 2026-10-13
 
 - Made generated WhatsApp, aftercare, follow-up, caption, story, hashtag and call-to-action drafts editable in place.
