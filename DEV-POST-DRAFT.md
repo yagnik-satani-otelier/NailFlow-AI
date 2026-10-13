@@ -20,7 +20,7 @@ The quote itself is calculated in code from the artist's editable menu, design c
 
 The deployed Vercel version demonstrates the web interface and its template fallback. It is **not connected to Ollama running on my computer**, so the hosted demo should not be treated as proof of live Gemma inference.
 
-For an AI demonstration, run the project locally with Ollama and Gemma 3 1B. In the local app, look for the **LOCAL AI** label on generated output. If the app shows **TEMPLATE MODE**, it used the built-in fallback instead.
+I verified the local AI path on Windows with Ollama 0.35.0 and Gemma 3 1B: the model passed a direct prompt test, and NailFlow then generated a client pack marked **LOCAL AI · Generated with local Ollama inference**. The hosted Vercel demo remains separate and uses its template fallback; it does not connect to the Ollama service on my PC.
 
 ## Code
 
@@ -30,7 +30,7 @@ For an AI demonstration, run the project locally with Ollama and Gemma 3 1B. In 
 
 NailFlow uses a dependency-free Node.js HTTP server, vanilla JavaScript, CSS, and browser localStorage. The local-AI path is designed to use **Gemma 3 1B through Ollama**. The browser calls the local Node server, which forwards a structured prompt to the Ollama API on the same machine. The model can be changed with the `OLLAMA_MODEL` environment variable.
 
-The prompts, validation, output parsing, deterministic pricing, and post-generation quote guardrails are visible in `lib/core.js`. When Ollama or the model is unavailable, the interface clearly labels generated content as template fallback rather than pretending it came from AI.
+The prompts, validation, output parsing, deterministic pricing, and post-generation quote guardrails are visible in `lib/core.js` and `server.js`. The server sends an explicit output schema to Ollama for each generation mode to improve structured responses from a small model. When Ollama or the model is unavailable, the interface clearly labels generated content as template fallback rather than pretending it came from AI.
 
 To run the local AI path, install [Ollama](https://ollama.com/download), then run these commands in the repository folder:
 
@@ -41,7 +41,7 @@ npm test
 npm start
 ```
 
-Open http://127.0.0.1:4174. Generate a sample client pack and confirm that the result says **LOCAL AI**. If it says **TEMPLATE MODE**, the request did not use Gemma.
+Open http://127.0.0.1:4174. Generate a sample client pack and confirm that the result says **LOCAL AI**. I verified this path locally; if a future run says **TEMPLATE MODE**, that request did not use Gemma.
 
 ## Why Does Open Innovation Matter?
 
@@ -53,6 +53,7 @@ There is a trade-off: the user must install and run Ollama and download a model,
 
 - **Automated suite:** 20 passing unit and HTTP integration tests covering input bounds, deterministic pricing, prompt constraints, quote guardrails, parsing, template fallback, a mocked Ollama bridge, and HTTP error/security cases.
 - **Browser smoke test:** with mocked generation responses, I checked in-place quote and content editing, saving a quote to the client pipeline, service-duration editing, and a 390px mobile layout without horizontal overflow.
-- **Important limitation:** the HTTP integration tests use a mock Ollama server, not the actual Gemma weights. These tests validate the app's bridge and guardrails but do not prove live Gemma output quality.
+- **Real local-AI smoke test:** ran `ollama run gemma3:1b` successfully, then generated a NailFlow client pack locally with the visible **LOCAL AI** label. This confirms the live inference path works on my machine; a single smoke test does not establish that every output is correct.
+- **Important limitation:** automated HTTP integration tests use a mock Ollama server, not the actual Gemma weights. They validate the app's bridge and guardrails but do not prove general output quality.
 
 I haven't run a customer trial yet, so I won't claim that a nail artist has paid for or adopted the tool. A useful next validation is to put it in front of one artist, observe a sample inquiry workflow, and use their feedback to improve it.
