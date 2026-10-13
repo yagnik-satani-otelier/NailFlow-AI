@@ -4,9 +4,14 @@
 
 NailFlow is built for the Hacktoberfest 2026 DEV Challenge Week 2 theme: **Side Hustle**. It is a new, standalone project, separate from WildMinute.
 
-## Preview
+## Live demo and preview
 
-The screenshots below show the current UI in its clearly labelled Template Mode. Real local-AI generation requires Ollama and the configured model; the screenshot is not evidence of a live model response.
+**Try the web demo:** https://nail-flow-ai-lemon.vercel.app/  
+**Source code:** https://github.com/yagnik-satani-otelier/NailFlow-AI
+
+The hosted Vercel version demonstrates the interface and template fallback. It does not have access to Ollama running on your computer, so do not interpret the hosted demo as proof of live Gemma inference. For the true local-AI workflow, run NailFlow on your own machine using the instructions below.
+
+The screenshots below show the current UI in clearly labelled Template Mode. Real local-AI generation requires Ollama and the configured model; the screenshots are not evidence of a live model response.
 
 ![NailFlow desktop overview](screenshots/overview.png)
 
@@ -74,9 +79,9 @@ The automated suite contains 20 tests across core logic and HTTP integration. It
 
 ## Demo plan
 
-For a contest demo, screen-record a real run on your machine showing: edit a service price, generate a client pack with Gemma (the badge should say **LOCAL AI**), copy but do not send the draft, save it to the pipeline, and generate a content pack. If Ollama isn't available, record Template Mode honestly and do not describe those drafts as AI-generated.
+For a contest video demo, screen-record a real run on your machine showing: edit a service price, confirm Ollama/Gemma is ready, generate a client pack with the **LOCAL AI** badge, edit the draft before copying, save it to the pipeline, and generate a content pack. Use sample client details and do not send messages to real customers during the recording. If Ollama isn't available, record Template Mode honestly and do not describe those drafts as AI-generated.
 
-The Week 2 contest allows a deployed project **or a video demo**. This project currently runs locally; no hosted demo URL is claimed in this repository. To demonstrate the AI honestly, show the sidebar reporting Gemma ready, generate one quote, then show the result labelled `LOCAL AI`. If your screen says Template Mode, use the fallback demo and do not describe it as model-generated.
+The public Vercel URL above is a web demo of the interface and template fallback. It is not connected to your computer's local Ollama service. For evidence of AI functionality, use a short screen recording from the local setup showing the sidebar reporting Gemma ready and generated output labelled `LOCAL AI`.
 
 ## Demo recording guide
 
