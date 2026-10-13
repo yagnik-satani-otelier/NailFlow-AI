@@ -1,6 +1,6 @@
 {
   "name": "nailflow-ai",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "A local-first client workflow assistant for independent nail artists, powered by open-weight AI.",
   "scripts": {
