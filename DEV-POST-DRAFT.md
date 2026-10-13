@@ -16,7 +16,9 @@ NailFlow keeps the human in charge. The quote is calculated deterministically fr
 
 ## Demo
 
-**Live demo:** https://nail-flow-ai-lemon.vercel.app/\n\nThe deployed Vercel app demonstrates the current web experience. Local Gemma generation requires Ollama on the user’s machine; the hosted deployment should not be described as running local inference unless that behavior has been separately verified.
+**Live demo:** https://nail-flow-ai-lemon.vercel.app/
+
+The deployed Vercel app demonstrates the current web experience. Local Gemma generation requires Ollama on the user’s machine; the hosted deployment should not be described as running local inference unless that behavior has been separately verified.
 
 Recommended short walkthrough: edit the starter service prices, enter a sample client request, generate a pack, edit the draft before copying, save it to the pipeline, and create a social content pack. Use sample details in the recording. Clearly distinguish the deployed experience from local Ollama/Gemma inference.
 
