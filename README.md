@@ -31,7 +31,7 @@ The screenshots below show the current UI in clearly labelled Template Mode. Rea
 
 NailFlow uses **Gemma 3 1B through Ollama** by default. When the model is installed and running locally, the Node.js server sends the prompt to the Ollama service on the same machine. There is no hosted AI endpoint, API key, user account, or analytics service in this project.
 
-The prompts, bounded output parser, and post-generation quote guardrails are in `lib/core.js`, so a developer can inspect or modify the rules, change the model via `OLLAMA_MODEL`, or adapt the workflow to a specific studio. Local inference avoids a per-generation hosted API bill and keeps client inquiry text on the machine where Ollama is running. When using a local model, the browser's request goes to this local Node server, which talks to local Ollama.
+The prompts, response schemas, bounded output parser, and post-generation quote guardrails are in `lib/core.js` and `server.js`, so a developer can inspect or modify the rules, change the model via `OLLAMA_MODEL`, or adapt the workflow to a specific studio. The local server sends an explicit JSON Schema to Ollama for each generation mode, rather than relying only on a generic JSON-format hint. Local inference avoids a per-generation hosted API bill and keeps client inquiry text on the machine where Ollama is running. When using a local model, the browser's request goes to this local Node server, which talks to local Ollama.
 
 Gemma is an open-weight model, but open weights are not automatically the same as OSI-approved open-source software. Review the model's license and terms before redistributing weights. NailFlow does not package model files.
 
