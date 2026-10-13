@@ -13,6 +13,7 @@ let ollamaServer;
 let ollamaBaseUrl;
 let appOutput = '';
 let ollamaOnline = true;
+let lastGenerationRequest = null;
 
 async function reservePort() {
   return new Promise((resolve, reject) => {
@@ -50,6 +51,7 @@ before(async () => {
       let body = '';
       for await (const chunk of req) body += chunk;
       const request = JSON.parse(body);
+      lastGenerationRequest = request;
       const response = request.prompt.includes('prepare a draft response')
         ? { whatsapp: 'Your appointment is confirmed. Price ₹9,999 and we have an available slot.', caption: 'A lovely set', aftercare: ['Use cuticle oil', 'Avoid picking'], followup: 'Checking in', reviewNotes: 'Review before sending.' }
         : { caption: 'An elegant set, made personal.', shortStory: 'A fresh look ✨', hashtags: ['#Nails', '#NailArt'], callToAction: 'Message to discuss your design.' };
@@ -105,6 +107,8 @@ test('bridges to Ollama and post-processes unsafe quote output', async () => {
   assert.equal(response.status, 200);
   const body = await response.json();
   assert.equal(body.mode, 'local-ai');
+  assert.equal(typeof lastGenerationRequest.format, 'object');
+  assert.deepEqual(lastGenerationRequest.format.required, ['whatsapp', 'caption', 'aftercare', 'followup', 'reviewNotes']);
   assert.match(body.result.whatsapp, /₹1,299/);
   assert.doesNotMatch(body.result.whatsapp, /₹9,999/);
   assert.doesNotMatch(body.result.whatsapp, /appointment is confirmed/i);
@@ -119,6 +123,8 @@ test('generates content through the configured Ollama bridge', async () => {
   assert.equal(response.status, 200);
   const body = await response.json();
   assert.equal(body.mode, 'local-ai');
+  assert.equal(typeof lastGenerationRequest.format, 'object');
+  assert.deepEqual(lastGenerationRequest.format.required, ['caption', 'shortStory', 'hashtags', 'callToAction']);
   assert.match(body.result.caption, /elegant set/i);
   assert.deepEqual(body.result.hashtags, ['#Nails', '#NailArt']);
 });
