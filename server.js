@@ -19,7 +19,7 @@ const OUTPUT_SCHEMAS = {
     properties: {
       whatsapp: { type: 'string' },
       caption: { type: 'string' },
-      aftercare: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4 },
+      aftercare: { type: 'array', items: { type: 'string' } },
       followup: { type: 'string' },
       reviewNotes: { type: 'string' }
     },
@@ -31,7 +31,7 @@ const OUTPUT_SCHEMAS = {
     properties: {
       caption: { type: 'string' },
       shortStory: { type: 'string' },
-      hashtags: { type: 'array', items: { type: 'string' }, maxItems: 12 },
+      hashtags: { type: 'array', items: { type: 'string' } },
       callToAction: { type: 'string' }
     },
     required: ['caption', 'shortStory', 'hashtags', 'callToAction'],
