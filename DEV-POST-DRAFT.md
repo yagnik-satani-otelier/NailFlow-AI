@@ -1,62 +1,63 @@
 ---
-title: "NailFlow AI: A Local-First Studio Assistant for Nail Artists"
+title: "NailFlow AI: Local AI for the Admin Side of a Nail Studio"
 published: false
 tags: devchallenge, hf26challenge, ai, opensource
 ---
 
-*This is a submission draft for the [Hacktoberfest Open-Source AI Challenge: Week 2 — Side Hustle](https://dev.to/challenges/hacktoberfest-week2-2026-10-12).* 
+# NailFlow AI: Local AI for the Admin Side of a Nail Studio 💅
 
-## What I Built
+Running a small nail studio means doing two jobs: the creative work clients come for, and the admin that happens between appointments. NailFlow AI is a small assistant I built for independent nail artists and beauty studios to make that second job easier.
 
-NailFlow AI is a local-first workflow assistant for independent nail artists and small beauty studios. A service inquiry can become a transparent estimate, an editable WhatsApp reply, general aftercare guidance, and a follow-up message. A separate content studio drafts social captions and story/status copy from the studio's own details.
+**Try the web demo:** https://nail-flow-ai-lemon.vercel.app/  
+**Source code:** https://github.com/yagnik-satani-otelier/NailFlow-AI
 
-The problem is small but frequent: solo artists do the creative work and the business admin. They need to answer enquiries clearly, apply consistent prices, follow up politely, and promote their work without spending the day writing variations of the same message.
+## What I built
 
-NailFlow keeps the human in charge. The quote is calculated deterministically from the studio's editable menu, chosen complexity, and explicit add-ons. After generation, server-side guardrails normalize detected currency amounts to the approved estimate and neutralize several common direct booking-confirmation claims. These safeguards are not perfect, so every reply still requires human review; the app never sends messages or books appointments automatically.
+NailFlow turns a service inquiry into a transparent price estimate and editable client-ready copy. It can prepare a WhatsApp reply, general aftercare notes, a follow-up message, and social content such as captions, stories, hashtags, and calls to action. A local client pipeline lets the artist save a quote and track it as Draft, Follow-up, or Done. The service menu can be edited to reflect the studio's own prices and session durations.
+
+The idea is deliberately focused: independent artists shouldn't have to rewrite the same kinds of messages all day or guess at a price on every inquiry. NailFlow gives them a draft they can review and adapt, not an automation that speaks to a client without permission.
+
+The quote itself is calculated in code from the artist's editable menu, design complexity, and selected add-ons. AI helps with wording; it does not decide the final price. Server-side guardrails normalize detected currency amounts to the computed estimate and neutralize some common false booking-confirmation claims. These safeguards reduce risk but are not perfect, so every message should still be reviewed before sending. NailFlow does not send messages or book appointments automatically.
 
 ## Demo
 
-**Live demo:** https://nail-flow-ai-lemon.vercel.app/
+The deployed Vercel version demonstrates the web interface and its template fallback. It is **not connected to Ollama running on my computer**, so the hosted demo should not be treated as proof of live Gemma inference.
 
-The deployed Vercel app demonstrates the current web experience. Local Gemma generation requires Ollama on the user’s machine; the hosted deployment should not be described as running local inference unless that behavior has been separately verified.
+For an AI demonstration, run the project locally with Ollama and Gemma 3 1B using the instructions below. In the local app, look for the **LOCAL AI** label on generated output. If the app shows **TEMPLATE MODE**, it used the built-in fallback instead.
 
-Recommended short walkthrough: edit the starter service prices, enter a sample client request, generate a pack, edit the draft before copying, save it to the pipeline, and create a social content pack. Use sample details in the recording. Clearly distinguish the deployed experience from local Ollama/Gemma inference.
+## How I built it
 
-## Code
+NailFlow uses a dependency-free Node.js HTTP server, vanilla JavaScript, CSS, and browser localStorage. The local-AI path is designed to use **Gemma 3 1B through Ollama**. The browser calls the local Node server, which forwards a structured prompt to the Ollama API on the same machine. The model can be changed with the `OLLAMA_MODEL` environment variable.
 
-Repository: https://github.com/yagnik-satani-otelier/NailFlow-AI
+The prompts, validation, output parsing, deterministic pricing, and post-generation quote guardrails are visible in `lib/core.js`. When Ollama or the model is unavailable, the interface clearly labels generated content as template fallback rather than pretending it came from AI.
 
-## How I Built It
+### Run the local AI path
 
-NailFlow uses a dependency-free Node.js HTTP server, vanilla JavaScript, and CSS. The AI path uses Gemma 3 1B through Ollama, running locally by default. The app calls the local server, and the server forwards a structured prompt to the local Ollama API. Model selection can be changed using `OLLAMA_MODEL`.
+Requirements: Node.js 18.18+ and [Ollama](https://ollama.com/download) installed on your computer.
 
-The prompts and output parsing are visible in `lib/core.js`. A native Node test suite currently passes 20 tests covering input bounds, deterministic pricing, prompt constraints, post-generation quote guardrails, response parsing, template fallback, a mocked Ollama bridge, and HTTP error/security cases. If Ollama isn't running or the model is missing, the UI marks the result as `TEMPLATE MODE` rather than labelling it AI-generated.
+```powershell
+ollama pull gemma3:1b
+npm run check
+npm test
+npm start
+```
 
-## Why Does Open Innovation Matter?
+Open http://127.0.0.1:4174. Generate a sample client pack and confirm that the result says **LOCAL AI**. If it says **TEMPLATE MODE**, the request did not use Gemma.
 
-For a solo studio, a per-message API bill and a cloud dependency can make a small admin assistant harder to justify. Local inference means drafts can be generated on the studio's own machine without a NailFlow-hosted inference account or API key. The studio controls its service menu, pricing logic, prompts, and model choice instead of relying on a closed writing endpoint.
+## Why open innovation matters
 
-This also changes the privacy boundary: when configured for local use, enquiry text goes to the local Ollama service rather than a hosted AI provider. The browser workspace is local to the device. The trade-off is that the user must install and run Ollama and a model, and small local models may need editing and review. Gemma's weights and runtime terms should still be reviewed separately; open weights should not be casually equated with OSI-approved open-source software.
+For a solo studio, a per-message AI bill or a dependency on a hosted writing API can make a small admin assistant less practical. Local inference can avoid a NailFlow-hosted inference service or API key, while letting the studio control its own service menu, prompts, and model choice. When run with Ollama on the same machine, enquiry text goes to that local Ollama service rather than to a hosted AI provider.
 
-## My Agent Session
+There is a trade-off: the user must install and run Ollama and download a model, and a small model can produce wording that needs editing. The hosted web demo is useful for seeing the interface, while local setup is necessary to demonstrate the Gemma path. Gemma is an open-weight model; open weights should not automatically be described as OSI-approved open-source software, and model terms should be reviewed separately.
 
-Optional. Add a real DevRelay session link or embed after capturing it. Do not claim a session that was not saved.
+## What I tested
 
-## My First User
+- **Automated suite:** 20 passing unit and HTTP integration tests covering input bounds, deterministic pricing, prompt constraints, quote guardrails, parsing, template fallback, a mocked Ollama bridge, and HTTP error/security cases.
+- **Browser smoke test:** with mocked generation responses, I checked in-place quote and content editing, saving a quote to the client pipeline, service-duration editing, and a 390px mobile layout without horizontal overflow.
+- **Important limitation:** the HTTP integration tests use a mock Ollama server, not the actual Gemma weights. These tests validate the app's bridge and guardrails but do not prove live Gemma output quality.
 
-Optional. Remove this section unless someone outside the build process has tried the app. If tested, share what workflow they attempted, what feedback they gave, and whether they would pay or use it again. Do not invent a testimonial or payment.
-
-## Prize Categories
-
-Potential category: **Best Use of Gemma**, if the finished, demonstrated project meaningfully uses Gemma and the final implementation meets the category rules. Confirm eligibility and name the category explicitly before publishing. Remove this section if it does not qualify.
-
-## What I Tested
-
-- Automated tests: `npm test` (20 passing unit and HTTP integration tests; the Ollama integration uses a mock server, not actual Gemma weights).
-- A browser UI smoke test with a mocked generation response covered in-place quote/content edits, saving to the client pipeline, service-duration editing, and 390px mobile layout without horizontal overflow.
-- Before publishing, still verify actual Ollama/Gemma inference locally, the `LOCAL AI` / `TEMPLATE MODE` labels, persistence across a real page refresh, export/clear, and capture a short video walkthrough of the deployed app.
-- I have not conducted a field or customer test yet. Replace this note with only what was actually tested.
+I haven't run a customer trial yet, so I won't claim that a nail artist has paid for or adopted the tool. A useful next validation is to put it in front of one artist, observe a real sample inquiry workflow, and use their feedback to improve it.
 
 ---
 
-**Submission checklist:** repository and deployed demo links are now included; capture a genuine walkthrough, publish using the official Week 2 submission template and `#hf26challenge` tag, verify current contest rules, and submit only one entry during the entry period. Do not publish this draft until placeholders are resolved and the demo has been recorded.
+This is a new project for the Hacktoberfest Open-Source AI Challenge Week 2: Side Hustle. I'm sharing the code and demo so others can inspect the approach, try it locally, and adapt the workflow to their own small business.
